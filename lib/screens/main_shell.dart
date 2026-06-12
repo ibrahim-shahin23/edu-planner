@@ -137,7 +137,7 @@ class _BottomNav extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, -4),
           ),
@@ -222,7 +222,7 @@ class _FocusBanner extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.accentPurple.withOpacity(0.4),
+              color: AppTheme.accentPurple.withValues(alpha: 0.4),
               blurRadius: 16,
               offset: const Offset(0, 4),
             ),
@@ -294,7 +294,11 @@ class _QuickActionsButtonState extends State<_QuickActionsButton>
 
   void _toggle() {
     setState(() => _expanded = !_expanded);
-    if (_expanded) _anim.forward(); else _anim.reverse();
+    if (_expanded) {
+      _anim.forward();
+    } else {
+      _anim.reverse();
+    }
   }
 
   @override
@@ -378,7 +382,7 @@ class _FabOption extends StatelessWidget {
           border: Border.all(color: AppTheme.divider),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),

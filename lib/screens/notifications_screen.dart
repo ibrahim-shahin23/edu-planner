@@ -1,8 +1,6 @@
 // lib/screens/notifications_screen.dart
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:animate_do/animate_do.dart';
-import '../providers/app_provider.dart';
 import '../services/notification_service.dart';
 import '../theme/app_theme.dart';
 import '../utils/utils.dart';
@@ -183,7 +181,7 @@ class _NotifCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isEnabled
-              ? AppTheme.accent.withOpacity(0.3)
+              ? AppTheme.accent.withValues(alpha: 0.3)
               : AppTheme.divider,
         ),
       ),
@@ -210,7 +208,7 @@ class _NotifCard extends StatelessWidget {
               Switch(
                 value: isEnabled,
                 onChanged: onToggle,
-                activeColor: AppTheme.accent,
+                activeThumbColor: AppTheme.accent,
               ),
             ],
           ),

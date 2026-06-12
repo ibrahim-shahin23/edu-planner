@@ -24,7 +24,7 @@ class AppProvider extends ChangeNotifier {
   List<StudySession> _sessions = [];
   List<StudySession> get sessions => _sessions;
 
-  List<Achievement> _achievements = allAchievements.map((a) => Achievement(
+  final List<Achievement> _achievements = allAchievements.map((a) => Achievement(
     id: a.id, title: a.title, description: a.description,
     icon: a.icon, pointsRequired: a.pointsRequired,
   )).toList();

@@ -68,7 +68,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               width: 300, height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: _pages[_page].color.withOpacity(0.08),
+                color: _pages[_page].color.withValues(alpha: 0.08),
               ),
             ),
           ),
@@ -79,7 +79,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               width: 250, height: 250,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: _pages[_page].color.withOpacity(0.06),
+                color: _pages[_page].color.withValues(alpha: 0.06),
               ),
             ),
           ),
@@ -207,8 +207,8 @@ class _OnboardPage extends StatelessWidget {
               height: 140,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: color.withOpacity(0.15),
-                border: Border.all(color: color.withOpacity(0.3), width: 2),
+                color: color.withValues(alpha: 0.15),
+                border: Border.all(color: color.withValues(alpha: 0.3), width: 2),
               ),
               child: Center(
                 child: Text(emoji, style: const TextStyle(fontSize: 64)),

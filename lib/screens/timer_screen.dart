@@ -6,7 +6,6 @@ import 'package:animate_do/animate_do.dart';
 import '../providers/app_provider.dart';
 import '../theme/app_theme.dart';
 import '../models/models.dart';
-import '../widgets/common_widgets.dart';
 
 class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key});
@@ -230,7 +229,7 @@ class _TimerCircle extends StatelessWidget {
               color: AppTheme.cardBg,
               boxShadow: [
                 BoxShadow(
-                  color: color.withOpacity(0.15),
+                  color: color.withValues(alpha: 0.15),
                   blurRadius: 40,
                   spreadRadius: 10,
                 ),
@@ -318,13 +317,13 @@ class _ArcPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     final shadowPaint = Paint()
-      ..color = color.withOpacity(0.3)
+      ..color = color.withValues(alpha: 0.3)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 14
       ..strokeCap = StrokeCap.round
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6);
 
-    final startAngle = -math.pi / 2;
+    const startAngle = -math.pi / 2;
     final sweepAngle = 2 * math.pi * progress;
 
     canvas.drawArc(
@@ -438,7 +437,7 @@ class _TimerControls extends StatelessWidget {
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: AppTheme.accent.withOpacity(0.4),
+                  color: AppTheme.accent.withValues(alpha: 0.4),
                   blurRadius: 20,
                   offset: const Offset(0, 6),
                 ),
@@ -486,7 +485,7 @@ class _CircleButton extends StatelessWidget {
       child: Container(
         width: size,
         height: size,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: AppTheme.cardBg,
           shape: BoxShape.circle,
         ),
@@ -757,7 +756,7 @@ class _SwitchSetting extends StatelessWidget {
         Switch(
           value: value,
           onChanged: onChanged,
-          activeColor: AppTheme.accent,
+          activeThumbColor: AppTheme.accent,
         ),
       ],
     );

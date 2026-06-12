@@ -133,10 +133,10 @@ class _FocusModeScreenState extends State<FocusModeScreen>
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 16, vertical: 8),
                               decoration: BoxDecoration(
-                                color: AppTheme.error.withOpacity(0.15),
+                                color: AppTheme.error.withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
-                                    color: AppTheme.error.withOpacity(0.4)),
+                                    color: AppTheme.error.withValues(alpha: 0.4)),
                               ),
                               child: const Row(
                                 children: [
@@ -176,8 +176,8 @@ class _FocusModeScreenState extends State<FocusModeScreen>
                                   shape: BoxShape.circle,
                                   gradient: RadialGradient(
                                     colors: [
-                                      AppTheme.accent.withOpacity(0.6),
-                                      AppTheme.accentPurple.withOpacity(0.3),
+                                      AppTheme.accent.withValues(alpha: 0.6),
+                                      AppTheme.accentPurple.withValues(alpha: 0.3),
                                       Colors.transparent,
                                     ],
                                   ),
@@ -233,10 +233,10 @@ class _FocusModeScreenState extends State<FocusModeScreen>
                         child: Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: AppTheme.cardBg.withOpacity(0.6),
+                            color: AppTheme.cardBg.withValues(alpha: 0.6),
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                                color: AppTheme.accent.withOpacity(0.3)),
+                                color: AppTheme.accent.withValues(alpha: 0.3)),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -277,7 +277,7 @@ class _FocusModeScreenState extends State<FocusModeScreen>
             child: Container(
               width: 250,
               height: 250,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppTheme.accentPurple,
               ),
@@ -295,7 +295,7 @@ class _FocusModeScreenState extends State<FocusModeScreen>
             child: Container(
               width: 300,
               height: 300,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppTheme.accent,
               ),
@@ -348,9 +348,9 @@ class _FocusTipsState extends State<_FocusTips> {
         key: ValueKey(_tipIndex),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppTheme.cardBg.withOpacity(0.5),
+          color: AppTheme.cardBg.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppTheme.accent.withOpacity(0.15)),
+          border: Border.all(color: AppTheme.accent.withValues(alpha: 0.15)),
         ),
         child: Text(
           tips[_tipIndex],

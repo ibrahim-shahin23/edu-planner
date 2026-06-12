@@ -73,7 +73,7 @@ class _TasksScreenState extends State<TasksScreen>
                           borderRadius: BorderRadius.circular(14),
                           boxShadow: [
                             BoxShadow(
-                              color: AppTheme.accent.withOpacity(0.4),
+                              color: AppTheme.accent.withValues(alpha: 0.4),
                               blurRadius: 12,
                               offset: const Offset(0, 4),
                             ),
@@ -238,7 +238,7 @@ class _FilterChip extends StatelessWidget {
           color: isSelected ? color : AppTheme.cardBg,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? color : color.withOpacity(0.3),
+            color: isSelected ? color : color.withValues(alpha: 0.3),
           ),
         ),
         child: Text(
@@ -334,8 +334,8 @@ class _TaskCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
           color: isOverdue
-              ? AppTheme.error.withOpacity(0.3)
-              : task.priorityColor.withOpacity(0.15),
+              ? AppTheme.error.withValues(alpha: 0.3)
+              : task.priorityColor.withValues(alpha: 0.15),
         ),
       ),
       child: Column(
@@ -472,7 +472,7 @@ class _TaskCard extends StatelessWidget {
           Container(
             height: 3,
             decoration: BoxDecoration(
-              color: task.priorityColor.withOpacity(0.4),
+              color: task.priorityColor.withValues(alpha: 0.4),
               borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(18),
                 bottomRight: Radius.circular(18),
@@ -630,10 +630,10 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
                     decoration: BoxDecoration(
                       color: isSelected
                           ? task.priorityColor
-                          : task.priorityColor.withOpacity(0.1),
+                          : task.priorityColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                          color: task.priorityColor.withOpacity(0.4)),
+                          color: task.priorityColor.withValues(alpha: 0.4)),
                     ),
                     child: Center(
                       child: Text(task.priorityLabel,

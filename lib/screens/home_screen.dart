@@ -69,7 +69,7 @@ class HomeScreen extends StatelessWidget {
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                  color: AppTheme.accent.withOpacity(0.4),
+                                  color: AppTheme.accent.withValues(alpha: 0.4),
                                   blurRadius: 15,
                                   offset: const Offset(0, 4))
                             ],
@@ -289,7 +289,7 @@ class _DailyGoalCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 14, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -307,7 +307,7 @@ class _DailyGoalCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: progress,
-              backgroundColor: Colors.white.withOpacity(0.25),
+              backgroundColor: Colors.white.withValues(alpha: 0.25),
               valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
               minHeight: 8,
             ),
@@ -343,7 +343,7 @@ class _LevelCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppTheme.accentPurple.withOpacity(0.3)),
+        border: Border.all(color: AppTheme.accentPurple.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -423,7 +423,7 @@ class _TaskTile extends StatelessWidget {
         color: AppTheme.cardBg,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-            color: task.priorityColor.withOpacity(0.2)),
+            color: task.priorityColor.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
@@ -513,7 +513,7 @@ class _SessionTile extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppTheme.accent.withOpacity(0.1),
+              color: AppTheme.accent.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Center(

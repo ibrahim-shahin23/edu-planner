@@ -256,7 +256,7 @@ class _WeeklyChart extends StatelessWidget {
                 ),
                 gridData: FlGridData(
                   show: true,
-                  getDrawingHorizontalLine: (v) => FlLine(
+                  getDrawingHorizontalLine: (v) => const FlLine(
                     color: AppTheme.divider,
                     strokeWidth: 1,
                   ),
@@ -275,8 +275,8 @@ class _WeeklyChart extends StatelessWidget {
                           colors: isToday
                               ? [AppTheme.accent, const Color(0xFF00A3FF)]
                               : [
-                                  AppTheme.accentPurple.withOpacity(0.6),
-                                  AppTheme.accentPurple.withOpacity(0.3),
+                                  AppTheme.accentPurple.withValues(alpha: 0.6),
+                                  AppTheme.accentPurple.withValues(alpha: 0.3),
                                 ],
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
@@ -397,7 +397,7 @@ class _ScoreBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
           child: LinearProgressIndicator(
             value: value.clamp(0.0, 1.0),
-            backgroundColor: Colors.white.withOpacity(0.2),
+            backgroundColor: Colors.white.withValues(alpha: 0.2),
             valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
             minHeight: 6,
           ),

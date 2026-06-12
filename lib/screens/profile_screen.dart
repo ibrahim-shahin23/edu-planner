@@ -55,7 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppTheme.accent.withOpacity(0.4),
+                                  color: AppTheme.accent.withValues(alpha: 0.4),
                                   blurRadius: 20,
                                   offset: const Offset(0, 6),
                                 ),
@@ -103,7 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 4),
                       decoration: BoxDecoration(
-                        color: AppTheme.accentPurple.withOpacity(0.2),
+                        color: AppTheme.accentPurple.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -254,7 +254,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? AppTheme.accent.withOpacity(0.2)
+                          ? AppTheme.accent.withValues(alpha: 0.2)
                           : AppTheme.cardBg,
                       borderRadius: BorderRadius.circular(12),
                       border: isSelected
@@ -334,13 +334,13 @@ class _FocusModeCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isOn
-                ? AppTheme.accentPurple.withOpacity(0.5)
+                ? AppTheme.accentPurple.withValues(alpha: 0.5)
                 : AppTheme.divider,
           ),
           boxShadow: isOn
               ? [
                   BoxShadow(
-                    color: AppTheme.accentPurple.withOpacity(0.3),
+                    color: AppTheme.accentPurple.withValues(alpha: 0.3),
                     blurRadius: 20,
                     offset: const Offset(0, 6),
                   )

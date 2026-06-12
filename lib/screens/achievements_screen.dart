@@ -143,7 +143,7 @@ class _ProfileHero extends StatelessWidget {
             width: 72,
             height: 72,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
+              color: Colors.white.withValues(alpha: 0.15),
               shape: BoxShape.circle,
             ),
             child: Center(
@@ -197,7 +197,7 @@ class _StatChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.15),
+        color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text('$value $label',
@@ -257,18 +257,18 @@ class _AchievementBadge extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: isUnlocked
-              ? AppTheme.accentPurple.withOpacity(0.15)
+              ? AppTheme.accentPurple.withValues(alpha: 0.15)
               : AppTheme.cardBg,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isUnlocked
-                ? AppTheme.accentPurple.withOpacity(0.5)
+                ? AppTheme.accentPurple.withValues(alpha: 0.5)
                 : AppTheme.divider,
           ),
           boxShadow: isUnlocked
               ? [
                   BoxShadow(
-                    color: AppTheme.accentPurple.withOpacity(0.2),
+                    color: AppTheme.accentPurple.withValues(alpha: 0.2),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -353,7 +353,7 @@ class _AchievementBadge extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 14, vertical: 6),
                 decoration: BoxDecoration(
-                  color: AppTheme.success.withOpacity(0.15),
+                  color: AppTheme.success.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Text('✅ Unlocked!',
@@ -422,7 +422,7 @@ class _MilestoneList extends StatelessWidget {
             color: AppTheme.cardBg,
             borderRadius: BorderRadius.circular(16),
             border: isDone
-                ? Border.all(color: AppTheme.success.withOpacity(0.4))
+                ? Border.all(color: AppTheme.success.withValues(alpha: 0.4))
                 : null,
           ),
           child: Column(

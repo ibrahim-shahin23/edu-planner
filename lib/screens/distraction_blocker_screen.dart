@@ -68,7 +68,7 @@ class _DistractionBlockerScreenState extends State<DistractionBlockerScreen> {
                       color: (_blockingActive
                               ? AppTheme.error
                               : AppTheme.accent)
-                          .withOpacity(0.35),
+                          .withValues(alpha: 0.35),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                     ),
@@ -120,10 +120,10 @@ class _DistractionBlockerScreenState extends State<DistractionBlockerScreen> {
             child: Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: AppTheme.accentYellow.withOpacity(0.1),
+                color: AppTheme.accentYellow.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
-                    color: AppTheme.accentYellow.withOpacity(0.3)),
+                    color: AppTheme.accentYellow.withValues(alpha: 0.3)),
               ),
               child: const Row(
                 children: [
@@ -208,11 +208,11 @@ class _DistractionBlockerScreenState extends State<DistractionBlockerScreen> {
           // ─── Focus Tips ───────────────────────────────────
           FadeInUp(
             delay: const Duration(milliseconds: 400),
-            child: GradientCard(
+            child: const GradientCard(
               gradient: AppTheme.timerGradient,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text('💪 Stay Strong Tips',
                       style: TextStyle(
                           color: Colors.white,
@@ -306,7 +306,7 @@ class _SiteTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: site.isBlocked
-              ? AppTheme.error.withOpacity(0.2)
+              ? AppTheme.error.withValues(alpha: 0.2)
               : AppTheme.divider,
         ),
       ),
@@ -331,7 +331,7 @@ class _SiteTile extends StatelessWidget {
           Switch(
             value: site.isBlocked,
             onChanged: onToggle,
-            activeColor: AppTheme.error,
+            activeThumbColor: AppTheme.error,
           ),
           GestureDetector(
             onTap: onDelete,
