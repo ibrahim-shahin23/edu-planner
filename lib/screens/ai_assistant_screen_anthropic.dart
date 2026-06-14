@@ -6,16 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import '../theme/app_theme.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-// Access it dynamically from the loaded environment map
-// ─────────────────────────────────────────────────────────────
-// 🔑  PASTE YOUR FREE GEMINI API KEY HERE
-//     Get one at: https://aistudio.google.com/app/apikey
-//     Free tier: 15 requests/min · 1,500 requests/day · no card needed
-// ─────────────────────────────────────────────────────────────
-final String _kGeminiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
-const _kGeminiModel = 'gemini-2.5-flash'; // free, fast, vision-capable
 
 // ─────────────────────────────────────────────────────────────
 // Data model for a single chat message
@@ -205,21 +195,17 @@ Formatting rules:
     _scrollDown();
 
     try {
-      final reply = await _callGemini(text, imageBytes);
+      final reply = await _callClaude(text, imageBytes);
       setState(() {
         _messages.removeLast(); // remove typing indicator
         _messages.add(_Msg(isUser: false, text: reply));
         _loading = false;
       });
-      // Store in Gemini history format for multi-turn context
-      _apiHistory.add({
-        'role': 'user',
-        'parts': _buildParts(text, imageBytes),
-      });
-      _apiHistory.add({
-        'role': 'model',
-        'parts': [{'text': reply}],
-      });
+      // Add to history for multi-turn context
+      _apiHistory.add({'role': 'user',
+        'content': _buildUserContent(text, imageBytes)});
+      _apiHistory.add({'role': 'assistant',
+        'content': reply});
     } catch (e) {
       setState(() {
         _messages.removeLast();
@@ -234,77 +220,59 @@ Formatting rules:
     _scrollDown();
   }
 
-  // ── Build a single Gemini "parts" list for one turn ─────────
-  // Gemini content format:  { "parts": [ {"text": "..."}, {"inline_data": {...}} ] }
-  List<Map<String, dynamic>> _buildParts(String text, Uint8List? image) {
-    final parts = <Map<String, dynamic>>[];
-    if (image != null) {
-      parts.add({
-        'inline_data': {
-          'mime_type': 'image/jpeg',
+  // ── Build user content (text + optional image) ─────────────
+  dynamic _buildUserContent(String text, Uint8List? image) {
+    if (image == null) return text;
+    return [
+      {
+        'type': 'image',
+        'source': {
+          'type': 'base64',
+          'media_type': 'image/jpeg',
           'data': base64Encode(image),
-        }
-      });
-    }
-    parts.add({'text': text.isEmpty ? 'Please analyse this image and help me.' : text});
-    return parts;
+        },
+      },
+      if (text.isNotEmpty) {'type': 'text', 'text': text},
+      if (text.isEmpty)    {'type': 'text', 'text': 'Please analyse this image and help me.'},
+    ];
   }
 
-  // ── Call Google Gemini API (FREE) ────────────────────────────
-  // Docs: https://ai.google.dev/gemini-api/docs/text-generation
-  Future<String> _callGemini(String text, Uint8List? image) async {
-    // 1. Keep 'contents' clean. It should only contain actual chat history and the current prompt.
-    final contents = <Map<String, dynamic>>[
+  // ── Call Anthropic API ────────────────────────────────────
+  Future<String> _callClaude(String text, Uint8List? image) async {
+    // Build messages list: history + new user message
+    final messages = [
       ..._apiHistory,
       {
         'role': 'user',
-        'parts': _buildParts(text, image),
-      },
+        'content': _buildUserContent(text, image),
+      }
     ];
-
-    final uri = Uri.parse(
-      'https://generativelanguage.googleapis.com/v1beta/models/'
-      '$_kGeminiModel:generateContent?key=$_kGeminiKey',
-    );
-
-    // 2. Pass systemInstruction natively in the request body
-    final requestBody = {
-      'contents': contents,
-      'systemInstruction': {
-        'parts': [
-          {'text': _systemPrompt}
-        ]
-      },
-      'generationConfig': {
-        'maxOutputTokens': 2048,
-        'temperature': 0.7,
-      },
-    };
 
     final response = await http
         .post(
-          uri,
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode(requestBody),
+          Uri.parse('https://api.anthropic.com/v1/messages'),
+          headers: {
+            'Content-Type': 'application/json',
+            'anthropic-version': '2023-06-01',
+          },
+          body: jsonEncode({
+            'model': 'claude-sonnet-4-6',
+            'max_tokens': 2048,
+            'system': _systemPrompt,
+            'messages': messages,
+          }),
         )
         .timeout(const Duration(seconds: 60));
 
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body) as Map<String, dynamic>;
-      final candidates = data['candidates'] as List?;
-      if (candidates == null || candidates.isEmpty) {
-        throw Exception('Empty response from Gemini');
-      }
-      final parts = candidates[0]['content']['parts'] as List;
-      return parts
-          .where((p) => p['text'] != null)
-          .map((p) => p['text'] as String)
-          .join('\n')
-          .trim();
+      final data = jsonDecode(response.body);
+      final content = data['content'] as List;
+      return content
+          .where((b) => b['type'] == 'text')
+          .map((b) => b['text'] as String)
+          .join('\n');
     } else {
-      final err = jsonDecode(response.body);
-      final msg = err['error']?['message'] ?? response.body;
-      throw Exception('Gemini error ${response.statusCode}: $msg');
+      throw Exception('API error ${response.statusCode}: ${response.body}');
     }
   }
 
@@ -321,32 +289,11 @@ Formatting rules:
   Widget build(BuildContext context) {
     final empty = _messages.isEmpty;
 
-    final keyMissing = _kGeminiKey == 'YOUR_GEMINI_API_KEY_HERE';
-
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: Column(children: [
         // ── Header ──────────────────────────────────────────
         _Header(onClear: empty ? null : _clearChat),
-
-        // ── API key warning banner ───────────────────────────
-        if (keyMissing)
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            color: const Color(0xFF7C3300),
-            child: Row(children: [
-              const Text('⚠️', style: TextStyle(fontSize: 16)),
-              const SizedBox(width: 8),
-              const Expanded(
-                child: Text(
-                  'Add your free Gemini API key in ai_assistant_screen.dart',
-                  style: TextStyle(color: Colors.white,
-                      fontSize: 12, fontWeight: FontWeight.w600),
-                ),
-              ),
-            ]),
-          ),
 
         // ── Messages / Welcome ───────────────────────────────
         Expanded(
