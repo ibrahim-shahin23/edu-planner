@@ -9,6 +9,7 @@ import 'home_screen.dart';
 import 'timer_screen.dart';
 import 'tasks_screen.dart';
 import 'achievements_screen.dart';
+import 'ai_assistant_screen.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
@@ -25,13 +26,14 @@ class _MainShellState extends State<MainShell> {
     TimerScreen(),
     TasksScreen(),
     AchievementsScreen(),
+    AiAssistantScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    // Show achievement toast when a new one is unlocked
     return Consumer<AppProvider>(
       builder: (context, provider, _) {
+        // Show achievement toast overlay
         WidgetsBinding.instance.addPostFrameCallback((_) {
           final a = provider.newlyUnlocked;
           if (a != null) {
@@ -96,10 +98,11 @@ class _BottomBar extends StatelessWidget {
   const _BottomBar({required this.index, required this.onTap});
 
   static const _items = [
-    _NavItem(Icons.home_rounded, Icons.home_outlined, 'Home'),
-    _NavItem(Icons.timer_rounded, Icons.timer_outlined, 'Timer'),
-    _NavItem(Icons.task_alt_rounded, Icons.task_alt_outlined, 'Tasks'),
-    _NavItem(Icons.emoji_events_rounded, Icons.emoji_events_outlined, 'Badges'),
+    _NavItem(Icons.home_rounded,          Icons.home_outlined,             'Home'),
+    _NavItem(Icons.timer_rounded,         Icons.timer_outlined,            'Timer'),
+    _NavItem(Icons.task_alt_rounded,      Icons.task_alt_outlined,         'Tasks'),
+    _NavItem(Icons.emoji_events_rounded,  Icons.emoji_events_outlined,     'Badges'),
+    _NavItem(Icons.auto_awesome_rounded,  Icons.auto_awesome_outlined,     'AI'),
   ];
 
   @override
@@ -120,9 +123,12 @@ class _BottomBar extends StatelessWidget {
       child: SafeArea(
         child: Row(
           children: _items.asMap().entries.map((e) {
-            final i = e.key;
-            final item = e.value;
+            final i     = e.key;
+            final item  = e.value;
             final active = index == i;
+            // AI tab gets a gradient accent dot
+            final isAI  = i == 4;
+
             return Expanded(
               child: GestureDetector(
                 onTap: () => onTap(i),
@@ -130,38 +136,54 @@ class _BottomBar extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // Active indicator
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 250),
                       height: 3,
-                      width: active ? 32 : 0,
+                      width: active ? 28 : 0,
                       margin: const EdgeInsets.only(bottom: 6),
                       decoration: BoxDecoration(
-                        color: AppColors.accent,
+                        gradient: active && isAI
+                            ? const LinearGradient(
+                                colors: [Color(0xFF00D9A3), Color(0xFF8B5CF6)])
+                            : null,
+                        color: active && !isAI ? AppColors.accent : null,
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
+                    // Icon — AI tab has a special gradient wrapper when active
                     AnimatedScale(
                       scale: active ? 1.15 : 1.0,
                       duration: const Duration(milliseconds: 200),
-                      child: Icon(
-                        active ? item.activeIcon : item.icon,
-                        color: active
-                            ? AppColors.accent
-                            : AppColors.textSecondary,
-                        size: 24,
-                      ),
+                      child: isAI && active
+                          ? ShaderMask(
+                              blendMode: BlendMode.srcIn,
+                              shaderCallback: (bounds) =>
+                                  const LinearGradient(
+                                    colors: [
+                                      Color(0xFF00D9A3),
+                                      Color(0xFF8B5CF6)
+                                    ],
+                                  ).createShader(bounds),
+                              child: Icon(item.activeIcon, size: 24),
+                            )
+                          : Icon(
+                              active ? item.activeIcon : item.icon,
+                              color: active
+                                  ? AppColors.accent
+                                  : AppColors.textSecondary,
+                              size: 24,
+                            ),
                     ),
                     const SizedBox(height: 3),
                     Text(
                       item.label,
                       style: TextStyle(
                         color: active
-                            ? AppColors.accent
+                            ? (isAI ? const Color(0xFF00D9A3) : AppColors.accent)
                             : AppColors.textSecondary,
                         fontSize: 10,
-                        fontWeight: active
-                            ? FontWeight.w700
-                            : FontWeight.w400,
+                        fontWeight: active ? FontWeight.w700 : FontWeight.w400,
                       ),
                     ),
                   ],
@@ -180,3 +202,7 @@ class _NavItem {
   final String label;
   const _NavItem(this.activeIcon, this.icon, this.label);
 }
+
+
+
+

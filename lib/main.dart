@@ -8,9 +8,12 @@ import 'providers/app_provider.dart';
 import 'theme/app_theme.dart';
 import 'screens/main_shell.dart';
 import 'screens/onboarding_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart'; // 1. Import package
 
 Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
