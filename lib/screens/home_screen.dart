@@ -307,7 +307,7 @@ class _DailyGoalCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
           child: LinearProgressIndicator(
             value: p.dailyProgress,
-            backgroundColor: Colors.white.withOpacity(0.25),
+            backgroundColor: Colors.white.withValues(alpha: 0.25),
             valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
             minHeight: 8,
           ),

@@ -49,7 +49,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             AnimatedPositioned(
               duration: const Duration(milliseconds: 500),
               top: -80, right: -60,
-              child: _Blob(color: _pages[_page].gradient.colors.first.withOpacity(0.12), size: 280),
+              child: _Blob(color: _pages[_page].gradient.colors.first.withValues(alpha: 0.12), size: 280),
             ),
             AnimatedPositioned(
               duration: const Duration(milliseconds: 500),
@@ -165,7 +165,7 @@ class _Page {
 
 class _PageView extends StatelessWidget {
   final _Page page;
-  const _PageView({super.key, required this.page});
+  const _PageView({ required this.page});
 
   @override
   Widget build(BuildContext context) {
