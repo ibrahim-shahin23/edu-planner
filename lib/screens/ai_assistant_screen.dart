@@ -24,7 +24,7 @@ class _Msg {
   final bool isUser;
   final String text;
   final Uint8List? imageBytes; // only for user messages with images
-  final bool isTyping;         // placeholder while AI responds
+  final bool isTyping; // placeholder while AI responds
 
   const _Msg({
     required this.isUser,
@@ -60,12 +60,12 @@ class _AiAssistantScreenState extends State<AiAssistantScreen>
     with TickerProviderStateMixin {
   final _controller = TextEditingController();
   final _scrollCtrl = ScrollController();
-  final _picker     = ImagePicker();
-  final _focusNode  = FocusNode();
+  final _picker = ImagePicker();
+  final _focusNode = FocusNode();
 
-  final List<_Msg>  _messages  = [];
-  Uint8List?        _pendingImage;
-  bool              _loading   = false;
+  final List<_Msg> _messages = [];
+  Uint8List? _pendingImage;
+  bool _loading = false;
   late AnimationController _shimmerCtrl;
 
   // History sent to API: list of {role, content} maps
@@ -148,36 +148,39 @@ Formatting rules:
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Container(
               margin: const EdgeInsets.only(top: 12, bottom: 8),
-              width: 40, height: 4,
+              width: 40,
+              height: 4,
               decoration: BoxDecoration(
                   color: AppColors.divider,
                   borderRadius: BorderRadius.circular(2))),
           ListTile(
             leading: Container(
-                width: 40, height: 40,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
-                    color: AppColors.accent.withOpacity(0.1),
+                    color: AppColors.accent.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10)),
                 child: const Icon(Icons.camera_alt_rounded,
                     color: AppColors.accent)),
             title: const Text('Take a photo',
-                style: TextStyle(color: AppColors.textPrimary,
-                    fontWeight: FontWeight.w600)),
+                style: TextStyle(
+                    color: AppColors.textPrimary, fontWeight: FontWeight.w600)),
             subtitle: const Text('Use your camera',
                 style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
             onTap: () => _pickImage(ImageSource.camera),
           ),
           ListTile(
             leading: Container(
-                width: 40, height: 40,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
-                    color: AppColors.purple.withOpacity(0.1),
+                    color: AppColors.purple.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10)),
                 child: const Icon(Icons.photo_library_rounded,
                     color: AppColors.purple)),
             title: const Text('Choose from gallery',
-                style: TextStyle(color: AppColors.textPrimary,
-                    fontWeight: FontWeight.w600)),
+                style: TextStyle(
+                    color: AppColors.textPrimary, fontWeight: FontWeight.w600)),
             subtitle: const Text('Pick an existing image',
                 style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
             onTap: () => _pickImage(ImageSource.gallery),
@@ -198,8 +201,7 @@ Formatting rules:
     setState(() {
       _pendingImage = null;
       _loading = true;
-      _messages.add(_Msg(
-          isUser: true, text: text, imageBytes: imageBytes));
+      _messages.add(_Msg(isUser: true, text: text, imageBytes: imageBytes));
       _messages.add(const _Msg(isUser: false, text: '', isTyping: true));
     });
     _scrollDown();
@@ -218,7 +220,9 @@ Formatting rules:
       });
       _apiHistory.add({
         'role': 'model',
-        'parts': [{'text': reply}],
+        'parts': [
+          {'text': reply}
+        ],
       });
     } catch (e) {
       setState(() {
@@ -246,7 +250,9 @@ Formatting rules:
         }
       });
     }
-    parts.add({'text': text.isEmpty ? 'Please analyse this image and help me.' : text});
+    parts.add({
+      'text': text.isEmpty ? 'Please analyse this image and help me.' : text
+    });
     return parts;
   }
 
@@ -335,14 +341,16 @@ Formatting rules:
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             color: const Color(0xFF7C3300),
-            child: Row(children: [
-              const Text('⚠️', style: TextStyle(fontSize: 16)),
-              const SizedBox(width: 8),
-              const Expanded(
+            child: const Row(children: [
+              Text('⚠️', style: TextStyle(fontSize: 16)),
+              SizedBox(width: 8),
+              Expanded(
                 child: Text(
                   'Add your free Gemini API key in ai_assistant_screen.dart',
-                  style: TextStyle(color: Colors.white,
-                      fontSize: 12, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600),
                 ),
               ),
             ]),
@@ -350,11 +358,13 @@ Formatting rules:
 
         // ── Messages / Welcome ───────────────────────────────
         Expanded(
-          child: empty ? _WelcomeView(onSuggest: _send) : _MessageList(
-            messages: _messages,
-            scrollCtrl: _scrollCtrl,
-            shimmerCtrl: _shimmerCtrl,
-          ),
+          child: empty
+              ? _WelcomeView(onSuggest: _send)
+              : _MessageList(
+                  messages: _messages,
+                  scrollCtrl: _scrollCtrl,
+                  shimmerCtrl: _shimmerCtrl,
+                ),
         ),
 
         // ── Pending image preview ────────────────────────────
@@ -397,36 +407,45 @@ class _Header extends StatelessWidget {
       child: Row(children: [
         // AI avatar
         Container(
-          width: 44, height: 44,
+          width: 44,
+          height: 44,
           decoration: BoxDecoration(
             gradient: const LinearGradient(
               colors: [Color(0xFF00D9A3), Color(0xFF8B5CF6)],
-              begin: Alignment.topLeft, end: Alignment.bottomRight,
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(14),
-            boxShadow: [BoxShadow(
-                color: AppColors.accent.withOpacity(0.35),
-                blurRadius: 12, offset: const Offset(0, 4))],
+            boxShadow: [
+              BoxShadow(
+                  color: AppColors.accent.withValues(alpha: 0.35),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4))
+            ],
           ),
-          child: const Center(
-              child: Text('🤖', style: TextStyle(fontSize: 22))),
+          child:
+              const Center(child: Text('🤖', style: TextStyle(fontSize: 22))),
         ),
         const SizedBox(width: 12),
-        Expanded(child: Column(
+        Expanded(
+            child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text('EduMentor AI',
-                style: TextStyle(color: AppColors.textPrimary,
-                    fontSize: 17, fontWeight: FontWeight.w800)),
+                style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w800)),
             Row(children: [
               Container(
-                  width: 7, height: 7,
+                  width: 7,
+                  height: 7,
                   decoration: const BoxDecoration(
                       color: AppColors.green, shape: BoxShape.circle)),
               const SizedBox(width: 5),
               const Text('Online · Academic Expert',
-                  style: TextStyle(
-                      color: AppColors.textSecondary, fontSize: 11)),
+                  style:
+                      TextStyle(color: AppColors.textSecondary, fontSize: 11)),
             ]),
           ],
         )),
@@ -456,50 +475,61 @@ class _WelcomeView extends StatelessWidget {
       child: Column(children: [
         // Hero
         Container(
-          width: 110, height: 110,
+          width: 110,
+          height: 110,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: const LinearGradient(
               colors: [Color(0xFF00D9A3), Color(0xFF8B5CF6)],
-              begin: Alignment.topLeft, end: Alignment.bottomRight,
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            boxShadow: [BoxShadow(
-                color: AppColors.accent.withOpacity(0.3),
-                blurRadius: 30, spreadRadius: 5)],
+            boxShadow: [
+              BoxShadow(
+                  color: AppColors.accent.withValues(alpha: 0.3),
+                  blurRadius: 30,
+                  spreadRadius: 5)
+            ],
           ),
-          child: const Center(
-              child: Text('🤖', style: TextStyle(fontSize: 52))),
+          child:
+              const Center(child: Text('🤖', style: TextStyle(fontSize: 52))),
         ),
         const SizedBox(height: 20),
         const Text('Hi, I\'m EduMentor!',
-            style: TextStyle(color: AppColors.textPrimary,
-                fontSize: 24, fontWeight: FontWeight.w800)),
+            style: TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 24,
+                fontWeight: FontWeight.w800)),
         const SizedBox(height: 8),
         const Text(
           'Your personal AI academic assistant.\nAsk me anything — I\'m here to help you succeed.',
           textAlign: TextAlign.center,
-          style: TextStyle(color: AppColors.textSecondary,
-              fontSize: 14, height: 1.55),
+          style: TextStyle(
+              color: AppColors.textSecondary, fontSize: 14, height: 1.55),
         ),
         const SizedBox(height: 28),
 
         // Capability chips
-        Row(mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-          _Cap('📚', 'Solve Problems'),
-          const SizedBox(width: 8),
-          _Cap('📅', 'Study Plans'),
-          const SizedBox(width: 8),
-          _Cap('🖼️', 'Analyse Images'),
-        ]),
+        SizedBox(
+          height: 40,
+          child: ListView(scrollDirection: Axis.horizontal, children: const [
+            _Cap('📚', 'Solve Problems'),
+            SizedBox(width: 8),
+            _Cap('📅', 'Study Plans'),
+            SizedBox(width: 8),
+            _Cap('🖼️', 'Analyse Images'),
+          ]),
+        ),
         const SizedBox(height: 28),
 
         // Suggestions
-        Align(
+        const Align(
           alignment: Alignment.centerLeft,
-          child: const Text('Try asking:',
-              style: TextStyle(color: AppColors.textSecondary,
-                  fontSize: 13, fontWeight: FontWeight.w600)),
+          child: Text('Try asking:',
+              style: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600)),
         ),
         const SizedBox(height: 12),
         ..._kSuggestions.map((s) => _SuggestionTile(
@@ -525,9 +555,11 @@ class _Cap extends StatelessWidget {
       child: Row(mainAxisSize: MainAxisSize.min, children: [
         Text(emoji, style: const TextStyle(fontSize: 14)),
         const SizedBox(width: 5),
-        Text(label, style: const TextStyle(
-            color: AppColors.textSecondary,
-            fontSize: 11, fontWeight: FontWeight.w600)),
+        Text(label,
+            style: const TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 11,
+                fontWeight: FontWeight.w600)),
       ]),
     );
   }
@@ -554,9 +586,12 @@ class _SuggestionTile extends StatelessWidget {
         child: Row(children: [
           Text(emoji, style: const TextStyle(fontSize: 18)),
           const SizedBox(width: 12),
-          Expanded(child: Text(text,
-              style: const TextStyle(color: AppColors.textPrimary,
-                  fontSize: 13, fontWeight: FontWeight.w500))),
+          Expanded(
+              child: Text(text,
+                  style: const TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500))),
           const Icon(Icons.arrow_forward_ios_rounded,
               color: AppColors.textSecondary, size: 13),
         ]),
@@ -588,9 +623,7 @@ class _MessageList extends StatelessWidget {
       itemBuilder: (_, i) {
         final msg = messages[i];
         if (msg.isTyping) return _TypingBubble(shimmerCtrl: shimmerCtrl);
-        return msg.isUser
-            ? _UserBubble(msg: msg)
-            : _AiBubble(msg: msg);
+        return msg.isUser ? _UserBubble(msg: msg) : _AiBubble(msg: msg);
       },
     );
   }
@@ -620,15 +653,17 @@ class _UserBubble extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 6),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
-                        boxShadow: [BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            blurRadius: 10, offset: const Offset(0, 4))],
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.3),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4))
+                        ],
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16),
                         child: Image.memory(msg.imageBytes!,
-                            width: 200, height: 160,
-                            fit: BoxFit.cover),
+                            width: 200, height: 160, fit: BoxFit.cover),
                       ),
                     ),
                   ),
@@ -644,14 +679,18 @@ class _UserBubble extends StatelessWidget {
                         bottomLeft: Radius.circular(18),
                         bottomRight: Radius.circular(4),
                       ),
-                      boxShadow: [BoxShadow(
-                          color: AppColors.accent.withOpacity(0.25),
-                          blurRadius: 10, offset: const Offset(0, 4))],
+                      boxShadow: [
+                        BoxShadow(
+                            color: AppColors.accent.withValues(alpha: 0.25),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4))
+                      ],
                     ),
                     child: Text(msg.text,
                         style: const TextStyle(
                             color: AppColors.bg,
-                            fontSize: 14, fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
                             height: 1.5)),
                   ),
               ],
@@ -659,13 +698,14 @@ class _UserBubble extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           Container(
-            width: 32, height: 32,
-            decoration: BoxDecoration(
+            width: 32,
+            height: 32,
+            decoration: const BoxDecoration(
               gradient: AppColors.gradientAccent,
               shape: BoxShape.circle,
             ),
-            child: const Center(
-                child: Text('👤', style: TextStyle(fontSize: 16))),
+            child:
+                const Center(child: Text('👤', style: TextStyle(fontSize: 16))),
           ),
         ],
       ),
@@ -702,15 +742,16 @@ class _AiBubble extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 32, height: 32,
+            width: 32,
+            height: 32,
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [Color(0xFF00D9A3), Color(0xFF8B5CF6)],
               ),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Center(
-                child: Text('🤖', style: TextStyle(fontSize: 16))),
+            child:
+                const Center(child: Text('🤖', style: TextStyle(fontSize: 16))),
           ),
           const SizedBox(width: 10),
           Flexible(
@@ -734,22 +775,23 @@ class _AiBubble extends StatelessWidget {
                 const SizedBox(height: 5),
                 Row(children: [
                   const Text('EduMentor',
-                      style: TextStyle(color: AppColors.textSecondary,
-                          fontSize: 10)),
+                      style: TextStyle(
+                          color: AppColors.textSecondary, fontSize: 10)),
                   const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
                       Clipboard.setData(ClipboardData(text: msg.text));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Copied to clipboard'),
-                            duration: Duration(seconds: 1)));
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Copied to clipboard'),
+                          duration: Duration(seconds: 1)));
                     },
                     child: const Row(children: [
                       Icon(Icons.copy_rounded,
                           color: AppColors.textSecondary, size: 11),
                       SizedBox(width: 3),
-                      Text('Copy', style: TextStyle(
-                          color: AppColors.textSecondary, fontSize: 10)),
+                      Text('Copy',
+                          style: TextStyle(
+                              color: AppColors.textSecondary, fontSize: 10)),
                     ]),
                   ),
                 ]),
@@ -773,14 +815,15 @@ class _TypingBubble extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
-          width: 32, height: 32,
+          width: 32,
+          height: 32,
           decoration: BoxDecoration(
             gradient: const LinearGradient(
                 colors: [Color(0xFF00D9A3), Color(0xFF8B5CF6)]),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: const Center(
-              child: Text('🤖', style: TextStyle(fontSize: 16))),
+          child:
+              const Center(child: Text('🤖', style: TextStyle(fontSize: 16))),
         ),
         const SizedBox(width: 10),
         Container(
@@ -805,9 +848,11 @@ class _TypingBubble extends StatelessWidget {
                 final scale = 0.6 + 0.4 * (t < 0.5 ? t * 2 : (1 - t) * 2);
                 return Container(
                   margin: const EdgeInsets.symmetric(horizontal: 3),
-                  width: 8, height: 8,
+                  width: 8,
+                  height: 8,
                   decoration: BoxDecoration(
-                    color: AppColors.accent.withOpacity(0.4 + 0.6 * scale),
+                    color:
+                        AppColors.accent.withValues(alpha: 0.4 + 0.6 * scale),
                     shape: BoxShape.circle,
                   ),
                   transform: Matrix4.identity()
@@ -890,20 +935,28 @@ abstract class _Seg {
 }
 
 class _SpaceSeg extends _Seg {
-  @override Widget build(BuildContext _) => const SizedBox(height: 6);
+  @override
+  Widget build(BuildContext _) => const SizedBox(height: 6);
 }
 
 class _HeadSeg extends _Seg {
   final String text;
   final int level;
   _HeadSeg(this.text, this.level);
-  @override Widget build(BuildContext _) {
-    final size = level == 1 ? 17.0 : level == 2 ? 15.0 : 13.0;
+  @override
+  Widget build(BuildContext _) {
+    final size = level == 1
+        ? 17.0
+        : level == 2
+            ? 15.0
+            : 13.0;
     return Padding(
       padding: const EdgeInsets.only(top: 6, bottom: 3),
       child: Text(_inlineStyle(text),
-          style: TextStyle(color: AppColors.accent,
-              fontSize: size, fontWeight: FontWeight.w800)),
+          style: TextStyle(
+              color: AppColors.accent,
+              fontSize: size,
+              fontWeight: FontWeight.w800)),
     );
   }
 }
@@ -911,103 +964,127 @@ class _HeadSeg extends _Seg {
 class _BulletSeg extends _Seg {
   final String text;
   _BulletSeg(this.text);
-  @override Widget build(BuildContext _) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 2),
-    child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Text('  • ', style: TextStyle(color: AppColors.accent,
-          fontWeight: FontWeight.w800, fontSize: 14)),
-      Expanded(child: Text(_inlineStyle(text),
-          style: const TextStyle(color: AppColors.textPrimary,
-              fontSize: 13, height: 1.5))),
-    ]),
-  );
+  @override
+  Widget build(BuildContext _) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text('  • ',
+              style: TextStyle(
+                  color: AppColors.accent,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 14)),
+          Expanded(
+              child: Text(_inlineStyle(text),
+                  style: const TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 13,
+                      height: 1.5))),
+        ]),
+      );
 }
 
 class _NumSeg extends _Seg {
   final String num, text;
   _NumSeg(this.num, this.text);
-  @override Widget build(BuildContext _) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 2),
-    child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Container(
-        margin: const EdgeInsets.only(top: 1, right: 8),
-        width: 22, height: 22,
-        decoration: BoxDecoration(
-            color: AppColors.accent.withOpacity(0.15),
-            shape: BoxShape.circle),
-        child: Center(child: Text(num,
-            style: const TextStyle(color: AppColors.accent,
-                fontSize: 11, fontWeight: FontWeight.w800))),
-      ),
-      Expanded(child: Text(_inlineStyle(text),
-          style: const TextStyle(color: AppColors.textPrimary,
-              fontSize: 13, height: 1.5))),
-    ]),
-  );
+  @override
+  Widget build(BuildContext _) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Container(
+            margin: const EdgeInsets.only(top: 1, right: 8),
+            width: 22,
+            height: 22,
+            decoration: BoxDecoration(
+                color: AppColors.accent.withValues(alpha: 0.15),
+                shape: BoxShape.circle),
+            child: Center(
+                child: Text(num,
+                    style: const TextStyle(
+                        color: AppColors.accent,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800))),
+          ),
+          Expanded(
+              child: Text(_inlineStyle(text),
+                  style: const TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 13,
+                      height: 1.5))),
+        ]),
+      );
 }
 
 class _TextSeg extends _Seg {
   final String text;
   _TextSeg(this.text);
-  @override Widget build(BuildContext _) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 1),
-    child: Text(_inlineStyle(text),
-        style: const TextStyle(color: AppColors.textPrimary,
-            fontSize: 13, height: 1.55)),
-  );
+  @override
+  Widget build(BuildContext _) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 1),
+        child: Text(_inlineStyle(text),
+            style: const TextStyle(
+                color: AppColors.textPrimary, fontSize: 13, height: 1.55)),
+      );
 }
 
 class _CodeSeg extends _Seg {
   final String code, lang;
   _CodeSeg(this.code, this.lang);
-  @override Widget build(BuildContext context) => Container(
-    margin: const EdgeInsets.symmetric(vertical: 8),
-    decoration: BoxDecoration(
-      color: const Color(0xFF0D1F3C),
-      borderRadius: BorderRadius.circular(12),
-      border: Border.all(color: AppColors.accent.withOpacity(0.2)),
-    ),
-    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+  @override
+  Widget build(BuildContext context) => Container(
+        margin: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
-          color: AppColors.accent.withOpacity(0.1),
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+          color: const Color(0xFF0D1F3C),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.accent.withValues(alpha: 0.2)),
         ),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text(lang.isEmpty ? 'code' : lang,
-              style: const TextStyle(color: AppColors.accent,
-                  fontSize: 11, fontWeight: FontWeight.w700)),
-          GestureDetector(
-            onTap: () {
-              Clipboard.setData(ClipboardData(text: code));
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Code copied!'),
-                    duration: Duration(seconds: 1)));
-            },
-            child: const Row(children: [
-              Icon(Icons.copy_rounded, color: AppColors.textSecondary, size: 13),
-              SizedBox(width: 4),
-              Text('Copy', style: TextStyle(
-                  color: AppColors.textSecondary, fontSize: 11)),
-            ]),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppColors.accent.withValues(alpha: 0.1),
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+            ),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(lang.isEmpty ? 'code' : lang,
+                      style: const TextStyle(
+                          color: AppColors.accent,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700)),
+                  GestureDetector(
+                    onTap: () {
+                      Clipboard.setData(ClipboardData(text: code));
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Code copied!'),
+                          duration: Duration(seconds: 1)));
+                    },
+                    child: const Row(children: [
+                      Icon(Icons.copy_rounded,
+                          color: AppColors.textSecondary, size: 13),
+                      SizedBox(width: 4),
+                      Text('Copy',
+                          style: TextStyle(
+                              color: AppColors.textSecondary, fontSize: 11)),
+                    ]),
+                  ),
+                ]),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(14),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Text(code,
+                  style: const TextStyle(
+                      color: Color(0xFF7DD3FC),
+                      fontFamily: 'monospace',
+                      fontSize: 12,
+                      height: 1.6)),
+            ),
           ),
         ]),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(14),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Text(code,
-              style: const TextStyle(
-                  color: Color(0xFF7DD3FC),
-                  fontFamily: 'monospace',
-                  fontSize: 12, height: 1.6)),
-        ),
-      ),
-    ]),
-  );
+      );
 }
 
 // Simple inline bold/italic stripper (converts **text** → bold)
@@ -1037,15 +1114,17 @@ class _ImagePreview extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.memory(bytes,
-                width: 90, height: 90, fit: BoxFit.cover),
+            child:
+                Image.memory(bytes, width: 90, height: 90, fit: BoxFit.cover),
           ),
           Positioned(
-            top: -6, right: -6,
+            top: -6,
+            right: -6,
             child: GestureDetector(
               onTap: onRemove,
               child: Container(
-                width: 22, height: 22,
+                width: 22,
+                height: 22,
                 decoration: const BoxDecoration(
                     color: AppColors.red, shape: BoxShape.circle),
                 child: const Icon(Icons.close_rounded,
@@ -1093,18 +1172,21 @@ class _InputBar extends StatelessWidget {
           onTap: loading ? null : onPickImage,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            width: 42, height: 42,
+            width: 42,
+            height: 42,
             decoration: BoxDecoration(
               color: hasImage
-                  ? AppColors.accent.withOpacity(0.15)
+                  ? AppColors.accent.withValues(alpha: 0.15)
                   : AppColors.card,
               borderRadius: BorderRadius.circular(13),
               border: hasImage
-                  ? Border.all(color: AppColors.accent.withOpacity(0.5))
+                  ? Border.all(color: AppColors.accent.withValues(alpha: 0.5))
                   : null,
             ),
             child: Icon(
-              hasImage ? Icons.image_rounded : Icons.add_photo_alternate_rounded,
+              hasImage
+                  ? Icons.image_rounded
+                  : Icons.add_photo_alternate_rounded,
               color: hasImage ? AppColors.accent : AppColors.textSecondary,
               size: 22,
             ),
@@ -1127,15 +1209,15 @@ class _InputBar extends StatelessWidget {
               maxLines: null,
               enabled: !loading,
               textCapitalization: TextCapitalization.sentences,
-              style: const TextStyle(
-                  color: AppColors.textPrimary, fontSize: 14),
+              style:
+                  const TextStyle(color: AppColors.textPrimary, fontSize: 14),
               decoration: const InputDecoration(
                 hintText: 'Ask me anything...',
-                hintStyle: TextStyle(
-                    color: AppColors.textSecondary, fontSize: 14),
+                hintStyle:
+                    TextStyle(color: AppColors.textSecondary, fontSize: 14),
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 11),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 16, vertical: 11),
                 filled: false,
               ),
               onSubmitted: (_) => onSend(),
@@ -1149,7 +1231,8 @@ class _InputBar extends StatelessWidget {
           onTap: loading ? null : onSend,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            width: 42, height: 42,
+            width: 42,
+            height: 42,
             decoration: BoxDecoration(
               gradient: loading
                   ? null
@@ -1160,22 +1243,25 @@ class _InputBar extends StatelessWidget {
               borderRadius: BorderRadius.circular(13),
               boxShadow: loading
                   ? null
-                  : [BoxShadow(
-                      color: AppColors.accent.withOpacity(0.35),
-                      blurRadius: 10, offset: const Offset(0, 3))],
+                  : [
+                      BoxShadow(
+                          color: AppColors.accent.withValues(alpha: 0.35),
+                          blurRadius: 10,
+                          offset: const Offset(0, 3))
+                    ],
             ),
             child: loading
                 ? const Center(
                     child: SizedBox(
-                      width: 18, height: 18,
+                      width: 18,
+                      height: 18,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
                         valueColor: AlwaysStoppedAnimation(AppColors.accent),
                       ),
                     ),
                   )
-                : const Icon(Icons.send_rounded,
-                    color: AppColors.bg, size: 20),
+                : const Icon(Icons.send_rounded, color: AppColors.bg, size: 20),
           ),
         ),
       ]),
